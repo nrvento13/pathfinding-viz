@@ -1,3 +1,3 @@
-from .plot_nodes_and_edges import plot_nodes_and_edges
+from .plot_area import plot_area
 
-__all__ = ["plot_nodes_and_edges"]
+__all__ = ["plot_area"]

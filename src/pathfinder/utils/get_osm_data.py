@@ -1,4 +1,13 @@
 import osmnx as ox
+import geopandas as gpd
+import pandas as pd
+
+__all__ = [
+    'get_area_boundary', 
+    'get_osm_data_from_place', 
+    'get_osm_data_from_poly', 
+    'get_merged_polygon'
+]
 
 def get_area_boundary(place_name):
     """
@@ -54,3 +63,21 @@ def get_osm_data_from_poly(polygon, network_type='drive'):
     gdf_nodes, gdf_edges = ox.graph_to_gdfs(graph)
 
     return gdf_nodes, gdf_edges
+
+def get_merged_polygon(place_names):
+    """
+    Get the merged polygon of multiple places.
+
+    Args:
+        place_names (list): A list of place names to merge.
+
+    Returns:
+        polygon (GeoDataFrame): A GeoDataFrame containing the merged polygon.
+    """
+
+    areas = [get_area_boundary(place_name) for place_name in place_names]
+
+    merged_area = gpd.GeoDataFrame(pd.concat(areas, ignore_index=True))
+    polygon = merged_area['geometry'].unary_union
+
+    return polygon
